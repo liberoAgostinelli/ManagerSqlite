@@ -1,11 +1,14 @@
 package manPkg;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Model {
 
@@ -15,7 +18,7 @@ public class Model {
 
 	public Model() {
 
-		
+
 	}
 	//Methods
 	private void init() {
@@ -37,11 +40,11 @@ public class Model {
 				}
 		}
 	}
-	
+
 
 	public void createDatabase(String fileName) {
 
-		String url = "jdbc:sqlite:" + fileName;
+		String url = "jdbc:sqlite:database/" + fileName;
 
 		try (Connection conn = DriverManager.getConnection(url)) {
 			if (conn != null) {
@@ -53,4 +56,21 @@ public class Model {
 			System.out.println(e.getMessage());
 		}
 	}
+
+	// Leggi file
+	private String[] leggiFile() {
+		File folder = new File("/home/molly/git/ManagerSqlite/ManagerSqlite_01/database");
+		List<String> l = new ArrayList<>();
+		for (File file : folder.listFiles()) {
+			if (!file.isDirectory()) {
+				System.out.println(file.getName());
+				l.add(file.getName());
+			}
+		}
+		String[] arr = new String[l.size()];
+		for(int i = 0; i<l.size(); i++) {
+			arr[i] = l.get(i);
+		}
+		return arr;
+	}	
 }

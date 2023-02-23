@@ -31,6 +31,7 @@ public class Controller {
 						}else {
 							//System.out.println(s +" Database Creato");
 							model.createDatabase(s + ".db");
+							view.aggiornaComboBox();
 							view.setTextArea("Database " + s +".db Creato");
 						}
 						
@@ -48,6 +49,7 @@ public class Controller {
 						}else {
 							//System.out.println(s +" Database Creato");
 							model.createDatabase(s + ".db");
+							view.aggiornaComboBox();
 							view.setTextArea("Database " + s +".db Creato");
 						}
 					}else {
