@@ -84,27 +84,41 @@ public class Controller {
 		}// end contenutoQuery.isEmpity
 	}// end verificaComando
 
+	/*
+	 * IsolaNomeDataBase è una funzione che isola il nome del database dalla stringa
+	 * immessa dall'utente.
+	 * Funzione da migliorare usando regex 
+	 */
 	private String isolaNomeDataBase(String contenutoQuery, String formato) {
-		
-		System.out.println(contenutoQuery.replace(" ","").toUpperCase());
-		System.out.println(formato.replace(" ", "").toUpperCase());
+	
+		/*
+		 *  if che controlla se e stato immesso il nome della tabella oppure
+		 *  solo create database. Poi nella funzione verifica comando verifica
+		 *  se la stringa sia vuota o meno
+		 */
 		if(contenutoQuery.replace(" ","").toUpperCase().equals(formato.replace(" ", "").toUpperCase()) ) {
 			
 			return "";
 		}
 		System.out.println("inizio debug");
 		System.out.println("0-" + contenutoQuery);
+		// Aggiunta spazio prima dei create database per pulire caratteri scritti prima
 		String sottoString = contenutoQuery.replace(formato + " ", " " + formato + " ");
 		System.out.println("1-" + sottoString);
 		System.out.println("2-" +sottoString.indexOf(" " + formato + " "));
+		// Isola eventuali caratteri scritti prima di create database
 		String c = sottoString.substring(0, sottoString.indexOf(" " + formato + " "));
-		System.out.println("3-" +c);
+		System.out.println("3-" +c+"-");
+		// Elimina eventuali caratteri scritti prima di create table
 		sottoString = sottoString.replace(c, "");
 		System.out.println("4-" +sottoString);
+		// Elimina create database
 		sottoString = sottoString.replace(formato, "");
 		System.out.println("5-" +sottoString);
+		// Si eliminano gli spazi
 		sottoString = sottoString.replace(" ", "");
 		System.out.println("6-" +sottoString);
+		// Si elimina il punto e virgola
 		sottoString = sottoString.replace(";", "");
 		System.out.println("7-" +sottoString);
 
