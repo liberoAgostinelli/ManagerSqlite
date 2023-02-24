@@ -40,17 +40,17 @@ public class Model {
 	public String createTable(String query, String db_selezionato) {
 		String esito = "Tabella creata";
 		String cartella = db_selezionato.replace(".db", "");
+		System.out.println("Nome cartella: " + cartella);
 		try (Connection conn = DriverManager.getConnection(jdbcDriver + cartella + "/" +db_selezionato);
                 Statement stmt = conn.createStatement()) {
             // create a new table
-            boolean b = stmt.execute(query);
-            //System.out.println(b);
+            stmt.execute(query);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             esito = e.getMessage();
         }
 		return esito;
-	}// end crea table
+	}// end crea tabelle
 	
 	public boolean creaDir(String dir) {
 		boolean esitoDir = (new File(dir).mkdirs());
