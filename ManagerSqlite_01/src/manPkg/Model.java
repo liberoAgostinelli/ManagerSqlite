@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Model {
 
-	private final String jdbcDriver = "jdbc:sqlite:temp.db";
+	private final String jdbcDriver = "jdbc:sqlite:database/";
 	private Connection conn = null;
 	private Statement stm = null;
 
@@ -21,30 +21,10 @@ public class Model {
 
 	}
 	//Methods
-	private void init() {
-		try {
-			conn = DriverManager.getConnection(jdbcDriver);
-			System.out.println("DB Aperto");
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally {
-			if(conn != null || stm != null)
-				try {
-					conn.close();
-					//stm.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		}
-	}
-
 
 	public void createDatabase(String fileName) {
 
-		String url = "jdbc:sqlite:database/" + fileName;
+		String url = jdbcDriver + fileName;
 
 		try (Connection conn = DriverManager.getConnection(url)) {
 			if (conn != null) {
@@ -55,22 +35,26 @@ public class Model {
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
+	}// end create database 
+	
+	public String createTable(String query, String db_selezionato) {
+		String esito = "Tabella creata";
+		String cartella = db_selezionato.replace(".db", "");
+		try (Connection conn = DriverManager.getConnection(jdbcDriver + cartella + "/" +db_selezionato);
+                Statement stmt = conn.createStatement()) {
+            // create a new table
+            boolean b = stmt.execute(query);
+            //System.out.println(b);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            esito = e.getMessage();
+        }
+		return esito;
+	}// end crea table
+	
+	public boolean creaDir(String dir) {
+		boolean esitoDir = (new File(dir).mkdirs());
+		return esitoDir;
 	}
 
-	// Leggi file
-	private String[] leggiFile() {
-		File folder = new File("/home/molly/git/ManagerSqlite/ManagerSqlite_01/database");
-		List<String> l = new ArrayList<>();
-		for (File file : folder.listFiles()) {
-			if (!file.isDirectory()) {
-				System.out.println(file.getName());
-				l.add(file.getName());
-			}
-		}
-		String[] arr = new String[l.size()];
-		for(int i = 0; i<l.size(); i++) {
-			arr[i] = l.get(i);
-		}
-		return arr;
-	}	
 }

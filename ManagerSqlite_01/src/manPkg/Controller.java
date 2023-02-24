@@ -40,10 +40,16 @@ public class Controller {
 				if(sottoString.contains(" ") || sottoString == "" || sottoString == " ") {
 					view.setTextArea("Errore nella query!");
 				}else {
-					//System.out.println(s +" Database Creato");
-					model.createDatabase(sottoString + ".db");
-					view.aggiornaComboBox();
-					view.setTextArea("Database " + sottoString +".db Creato");
+					String path = "/home/molly/git/ManagerSqlite/ManagerSqlite_01/database/";
+					if(model.creaDir(path+sottoString)) {
+						System.out.println("Ho creato: " + sottoString);
+						model.createDatabase(sottoString + "/" + sottoString + ".db");
+						view.aggiornaComboBox();
+						view.setTextArea("Database " + sottoString +".db Creato");
+					}else {
+						System.out.println("Impossibile creare: " + sottoString);
+					}
+					
 				}
 			}else 
 
@@ -53,14 +59,28 @@ public class Controller {
 				if(sottoString.contains(" ") || sottoString == "" || sottoString == " ") {
 					view.setTextArea("Errore nella query!");
 				}else {
-					model.createDatabase(sottoString + ".db");
-					view.aggiornaComboBox();
-					view.setTextArea("Database " + sottoString +".db Creato");
+					String path = "/home/molly/git/ManagerSqlite/ManagerSqlite_01/database/";
+					if(model.creaDir(path+sottoString)) {
+						System.out.println("Ho creato: " + sottoString);
+						model.createDatabase(sottoString + "/" + sottoString + ".db");
+						view.aggiornaComboBox();
+						view.setTextArea("Database " + sottoString +".db Creato");
+					}else {
+						System.out.println("Impossibile creare: " + sottoString);
+					}
 				}
 			}else {
-				view.setTextArea("Errore nella query!");
+				//view.setTextArea("Errore nella query!");
+			}// end Create database
+			
+			// create table
+			if(contenutoQuery.contains("CREATE TABLE") || contenutoQuery.contains("create table")) {
+				String esito = "";
+				esito = model.createTable(contenutoQuery, view.getDB_selezionato());
+				view.setTextArea(esito);
+				System.out.println("Query: " +contenutoQuery+ "DB: " + view.getDB_selezionato());
 			}
-			// end Create database
+			
 		}// end contenutoQuery.isEmpity
 	}// end verificaComando
 

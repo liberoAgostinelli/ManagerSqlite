@@ -118,7 +118,7 @@ public class View extends JFrame{
 	private void setComboBoxPanel() {
 		String[] s = leggiFile();
 		comboBox = new JComboBox(s);
-		comboBox.setSize(new Dimension(200, 200));
+		comboBox.setPreferredSize(new Dimension(200, 25));
 		
 		comboBoxJPanel.setLayout(new FlowLayout());
 		comboBoxJPanel.setBorder(blackline);
@@ -135,26 +135,58 @@ public class View extends JFrame{
 		return btnEsegui;
 	}
 	
+	public String getDB_selezionato() {
+		return comboBox.getSelectedItem().toString();
+	}
+	
 	// Setter
 	public void setTextArea(String str) {
 		textAreaResponse.setText(str);
 	}
-	// Leggi file
+	/*
+	 * leggiFile e una funzione che legge i file in modo ricorsivo nelle cartelle 
+	 * a partire dalla cartella database.
+	 */
 	private String[] leggiFile() {
+		
 		File folder = new File("/home/molly/git/ManagerSqlite/ManagerSqlite_01/database");
-		List<String> l = new ArrayList<>();
-		for (File file : folder.listFiles()) {
-			if (!file.isDirectory()) {
-				System.out.println(file.getName());
-				l.add(file.getName());
+		List<String> listaFile = new ArrayList<>();// lista file 
+		List<String> listaDir = new ArrayList<>(); // lista cartelle
+		// Primo for che popola la lista delle cartelle
+		for(File file : folder.listFiles()) {
+			if(file.isDirectory()) { // oggetto contenuto in folder sia o no una directori
+				listaDir.add(file.getName()); // popolamento lista cartelle
+				System.out.println("popolamento lista cartelle " + file.getName());
 			}
 		}
-		String[] arr = new String[l.size()];
-		for(int i = 0; i<l.size(); i++) {
-			arr[i] = l.get(i);
+		// Secondo for che legge tutti i file in modo ricorsivo da tutte le cartelle
+		for(int i = 0; i<listaDir.size(); i++) {
+			File folders = 
+			new File("/home/molly/git/ManagerSqlite/ManagerSqlite_01/database/" + listaDir.get(i));
+			System.out.println("lista dir: " + listaDir.get(i)); // prima cartella
+			for(File file : folders.listFiles()) { // for annidato che legge tutti i file
+				//if che esclude i file nascosti
+				if (!file.isDirectory() && file.getName().charAt(0) != '.') {
+					System.out.println(file.getName().charAt(0));
+					System.out.println("file.getName(): " + file.getName());
+					listaFile.add(file.getName());// popolamento lista file
+				}
+			}
 		}
+		/*
+		 * Terzo for obbligato per popolare l'array da restiruire perche non si conosce
+		 * il numero esatto di file per inizializzare l'array.
+		 * La comboBox a cui e destinato l'array accetta solo array tradizionali non le liste
+		 */
+		String[] arr = new String[listaFile.size()];
+		for(int i = 0; i<listaFile.size(); i++) {
+				arr[i] = listaFile.get(i);
+		}
+		System.out.println(listaDir.toString());
 		return arr;
-	}	
+	}// end leggi file
+	
+	
 	
 	// Aggiorna comboBox
 	public void aggiornaComboBox() {
